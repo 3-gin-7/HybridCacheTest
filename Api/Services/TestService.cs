@@ -1,12 +1,19 @@
 using Api.Dto;
 using Api.Interfaces;
 using Api.Models;
+using Microsoft.Extensions.Caching.Hybrid;
 
 namespace Api.Services;
 
 public class TestService : ITestService
 {
     private readonly List<Data> _datastore = new();
+    private readonly HybridCache cache;
+
+    public TestService(HybridCache cache)
+    {
+        this.cache = cache;
+    }
 
     public async Task<Data> CreateDataAsync(DataDto data)
     {
