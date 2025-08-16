@@ -8,12 +8,8 @@ namespace Api.Services;
 public class TestService : ITestService
 {
     private readonly List<Data> _datastore = new();
-    private readonly HybridCache cache;
 
-    public TestService(HybridCache cache)
-    {
-        this.cache = cache;
-    }
+    public TestService() {}
 
     public async Task<Data> CreateDataAsync(DataDto data)
     {

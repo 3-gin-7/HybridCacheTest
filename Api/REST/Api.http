@@ -1,15 +1,15 @@
 @Api_HostAddress = http://localhost:5264
 
-###
+### GET ALL
 
 GET {{Api_HostAddress}}/api/data
 
-###
+### GET BY ID
 
-GET {{Api_HostAddress}}/api/data/81e31fb5-cc7a-44d0-b5d4-7aa49fccbe27
+GET {{Api_HostAddress}}/api/data/a26a9c3e-c1df-41e7-93d5-d39c688e0097
 Accept: application/json
 
-###
+### ADD
 
 POST {{Api_HostAddress}}/api/data
 Content-Type: application/json
@@ -18,13 +18,15 @@ Content-Type: application/json
     "DataValue": "somevalue"
 }
 
-###
-PUT {{Api_HostAddress}}/api/data/2ea315bd-903e-4097-a872-81f33ed62435
+### UPDATE
+
+PUT {{Api_HostAddress}}/api/data/5a7f0ad3-66a0-4f14-8f29-d7d2119bdb3d
 Content-Type: application/json
 
 {
     "DataValue" : "updated-somevalue"
 }
 
-###
-DELETE {{Api_HostAddress}}/api/data/2ea315bd-903e-4097-a872-81f33ed62435
+### DELETE
+
+DELETE {{Api_HostAddress}}/api/data/5a7f0ad3-66a0-4f14-8f29-d7d2119bdb3d

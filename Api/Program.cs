@@ -57,6 +57,7 @@ app.MapPut("/api/data/{id}", async (
     ITestService testService, HybridCache cache) =>
 {
     await cache.RemoveAsync($"data:{id}");
+    await cache.RemoveAsync($"data:all");
     return Results.Ok(await testService.UpdateDataAsync(id, data));
 });
 
@@ -64,8 +65,15 @@ app.MapDelete("/api/data/{id}", async (
     Guid id,
     ITestService testService, HybridCache cache) =>
 {
-    await cache.RemoveAsync($"data:{id}");
-    return Results.Ok(await testService.DeleteDataAsync(id));
+    var response = await testService.DeleteDataAsync(id);
+
+    if (response != null)
+    {
+        await cache.RemoveAsync($"data:all");
+        await cache.RemoveAsync($"data:{id}");
+    }
+
+    return Results.Ok(response);
 });
 
 
