@@ -1,8 +1,14 @@
+using Api.Dto;
+using Api.Interfaces;
+using Api.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
+
+builder.Services.AddSingleton<ITestService, TestService>();
 
 var app = builder.Build();
 
@@ -14,28 +20,30 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
+app.MapGet("/api/data/{id}", async (Guid id, ITestService testService) =>
 {
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    return Results.Ok(await testService.GetDataAsync(id));
+});
 
-app.MapGet("/weatherforecast", () =>
+app.MapGet("/api/data", async (ITestService testService) =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+    return Results.Ok(await testService.GetAllDataAsync());
+});
+
+app.MapPost("/api/data", async (DataDto data, ITestService testService) =>
+{
+    return Results.Ok(await testService.CreateDataAsync(data));
+});
+
+app.MapPut("/api/data/{id}", async (Guid id, DataDto data, ITestService testService) =>
+{
+    return Results.Ok(await testService.UpdateDataAsync(id, data));
+});
+
+app.MapDelete("/api/data/{id}", async (Guid id, ITestService testService) =>
+{
+    return Results.Ok(await testService.DeleteDataAsync(id));
+});
+
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
