@@ -35,12 +35,12 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           {{- with .Values.securityContext }}
-          env:
-            - name: "ConnectionStrings__Redis"
-              value: {{.Values.connectionStrings.redis}}
           securityContext:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+          env:
+            - name: "ConnectionStrings__Redis"
+              value: {{.Values.connectionStrings.redis}}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
