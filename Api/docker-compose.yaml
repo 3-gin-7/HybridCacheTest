@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+
+  cache-api:
+    image: cache-api:latest
+    container_name: "cache-api"
+    ports:
+      - "8080:80"
+    networks:
+      - default
+
+  garnet:
+      image: 'ghcr.io/microsoft/garnet'
+      ulimits:
+        memlock: -1
+      ports:
+        - "6379:6379"
+      networks:
+        - default
+
+networks:
+  default:
+    driver: bridge

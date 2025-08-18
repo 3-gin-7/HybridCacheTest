@@ -18,6 +18,8 @@ builder.Services.AddStackExchangeRedisCache(opt =>
     opt.Configuration = builder.Configuration.GetConnectionString("Redis");
 });
 
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -27,6 +29,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapHealthChecks("/healthz");
 
 app.MapGet("/api/data/{id}", async (
     Guid id,

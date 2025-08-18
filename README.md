@@ -1,3 +1,45 @@
-HybridCache Test project
+# HybridCache Test project
 
-# Commands:
+## Commands:
+
+Docker
+
+- Api
+cd ./Api
+docker build -t cache-api
+
+docker run -p 8080:80 cache-api
+
+- Garnet
+
+docker pull ghcr.io/microsoft/garnet:sha-9aa9817
+docker tag ghcr.io/microsoft/garnet garnet
+
+docker run -p 6379:6379 --ulimit memlock=-1 garnet
+
+- Docker compose
+docker compose up
+
+Helm
+
+minikube start
+
+// load the cache api into the minikube
+docker context use default
+minikube image load cache-api:latest
+
+// install garnet
+helm upgrade --install garnet oci://ghcr.io/microsoft/helm-charts/garnet
+
+helm upgrade --install --create-namespace -n garnet garnet-cache oci://ghcr.io/microsoft/helm-charts/garnet --set replicaCount=1 --set image.repository=ghcr.io/microsoft/garnet --set image.tag=latest --set service.type=ClusterIP --set service.port=6379 --set resources.requests.memory=2Gi --set resources.limits.memory=2Gi --set resources.requests.cpu=500m --set resources.limits.cpu=1000m --set containerArgs[0]=--memory --set containerArgs[1]=2GB
+
+
+// install the cache-api
+cd Api
+helm upgrade --install cache-api .\helm\
+
+
+
+todo:
+add sqlite
+test helm
