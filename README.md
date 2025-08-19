@@ -32,6 +32,7 @@ docker compose up
 minikube start
 
 - Load the cache api into the minikube
+
 docker context use default
 minikube image load cache-api:latest
 
