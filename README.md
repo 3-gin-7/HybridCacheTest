@@ -31,20 +31,23 @@ docker compose up
 
 minikube start
 
-// load the cache api into the minikube
+- Load the cache api into the minikube
 docker context use default
 minikube image load cache-api:latest
 
-// install garnet
+- Install garnet
+
 helm upgrade --install garnet oci://ghcr.io/microsoft/helm-charts/garnet
 
 helm upgrade --install --create-namespace -n garnet garnet-cache oci://ghcr.io/microsoft/helm-charts/garnet --set replicaCount=1 --set image.repository=ghcr.io/microsoft/garnet --set image.tag=latest --set service.type=ClusterIP --set service.port=6379 --set resources.requests.memory=2Gi --set resources.limits.memory=2Gi --set resources.requests.cpu=500m --set resources.limits.cpu=1000m
 
 
-// install the cache-api
+- Install the cache-api
+
 cd Api
 helm upgrade --install cache-api .\helm\
 
 
-// port forward to test locally
+- Port forward to test api locally
+
 kubectl port-forward svc/cache-api 8080:80
