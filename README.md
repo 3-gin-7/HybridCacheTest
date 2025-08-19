@@ -7,6 +7,7 @@
 - Api
 
 cd ./Api
+
 docker build -t cache-api
 
 docker run -p 8080:80 cache-api
@@ -14,11 +15,13 @@ docker run -p 8080:80 cache-api
 - Sqlite
 
 cd ./Api
+
 dotnet database update
 
 - Garnet
 
 docker pull ghcr.io/microsoft/garnet:sha-9aa9817
+
 docker tag ghcr.io/microsoft/garnet garnet
 
 docker run -p 6379:6379 --ulimit memlock=-1 garnet
@@ -34,6 +37,7 @@ minikube start
 - Load the cache api into the minikube
 
 docker context use default
+
 minikube image load cache-api:latest
 
 - Install garnet
@@ -46,6 +50,7 @@ helm upgrade --install --create-namespace -n garnet garnet-cache oci://ghcr.io/m
 - Install the cache-api
 
 cd Api
+
 helm upgrade --install cache-api .\helm\
 
 
