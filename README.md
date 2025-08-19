@@ -2,13 +2,19 @@
 
 ## Commands:
 
-Docker
+### Docker
 
 - Api
+
 cd ./Api
 docker build -t cache-api
 
 docker run -p 8080:80 cache-api
+
+- Sqlite
+
+cd ./Api
+dotnet database update
 
 - Garnet
 
@@ -18,9 +24,10 @@ docker tag ghcr.io/microsoft/garnet garnet
 docker run -p 6379:6379 --ulimit memlock=-1 garnet
 
 - Docker compose
+
 docker compose up
 
-Helm
+### Helm
 
 minikube start
 
@@ -41,6 +48,3 @@ helm upgrade --install cache-api .\helm\
 
 // port forward to test locally
 kubectl port-forward svc/cache-api 8080:80
-
-todo:
-add sqlite

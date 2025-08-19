@@ -1,3 +1,4 @@
+using Api.Context;
 using Api.Dto;
 using Api.Interfaces;
 using Api.Services;
@@ -9,8 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddSingleton<ITestService, TestService>();
-
+builder.Services.AddTransient<ITestService, TestService>();
+builder.Services.AddDbContext<AppDbContext>();
 
 builder.Services.AddHybridCache();
 builder.Services.AddStackExchangeRedisCache(opt =>

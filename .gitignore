@@ -45,9 +45,6 @@ x86/
 publish/
 *.publish/
 
-# Entity Framework
-migrations/
-
 # Development appsettings files
 appsettings.Development.json
 appsettings.Local.json

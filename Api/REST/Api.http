@@ -1,5 +1,5 @@
-# @Api_HostAddress = http://localhost:5264
-@Api_HostAddress = http://localhost:8080
+@Api_HostAddress = http://localhost:5264
+# @Api_HostAddress = http://localhost:8080
 
 ### GET ALL
 
@@ -16,7 +16,7 @@ POST {{Api_HostAddress}}/api/data
 Content-Type: application/json
 
 {
-    "DataValue": "somevalue"
+    "DataValue": "somevalue1"
 }
 
 ### UPDATE

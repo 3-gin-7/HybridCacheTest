@@ -1,15 +1,18 @@
+using Api.Context;
 using Api.Dto;
 using Api.Interfaces;
 using Api.Models;
-using Microsoft.Extensions.Caching.Hybrid;
 
 namespace Api.Services;
 
 public class TestService : ITestService
 {
-    private readonly List<Data> _datastore = new();
+    private readonly AppDbContext _context;
 
-    public TestService() {}
+    public TestService(AppDbContext context)
+    {
+        _context = context;
+    }
 
     public async Task<Data> CreateDataAsync(DataDto data)
     {
@@ -18,14 +21,15 @@ public class TestService : ITestService
             Id = Guid.NewGuid(),
             DataValue = data.DataValue
         };
-        _datastore.Add(newData);
+        _context.DataEntries.Add(newData);
+        await _context.SaveChangesAsync();
 
         return await Task.FromResult(newData);
     }
 
     public async Task<ReadDataDto?> GetDataAsync(Guid id)
     {
-        var data = _datastore.FirstOrDefault(d => d.Id == id);
+        var data = _context.DataEntries.FirstOrDefault(_ => _.Id == id);
         if (data == null)
         {
             return null;
@@ -40,7 +44,7 @@ public class TestService : ITestService
 
     public async Task<List<ReadDataDto>> GetAllDataAsync()
     {
-        var data = _datastore.Select(_ => new ReadDataDto
+        var data = _context.DataEntries.Select(_ => new ReadDataDto
         {
             Id = _.Id,
             DataValue = _.DataValue
@@ -51,7 +55,7 @@ public class TestService : ITestService
 
     public async Task<Data?> UpdateDataAsync(Guid id, DataDto data)
     {
-        var ogData = _datastore.FirstOrDefault(d => d.Id == id);
+        var ogData = _context.DataEntries.FirstOrDefault(d => d.Id == id);
         if (ogData == null)
         {
             return null;
@@ -64,14 +68,15 @@ public class TestService : ITestService
 
     public async Task<Data?> DeleteDataAsync(Guid id)
     {
-        var data = _datastore.FirstOrDefault(d => d.Id == id);
+        var data = _context.DataEntries.FirstOrDefault(d => d.Id == id);
 
         if (data == null)
         {
             return null;
         }
 
-        _datastore.Remove(data);
+        _context.DataEntries.Remove(data);
+        await _context.SaveChangesAsync();
         return await Task.FromResult(data);
     }
 
