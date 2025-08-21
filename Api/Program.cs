@@ -3,6 +3,7 @@ using Api.Dto;
 using Api.Interfaces;
 using Api.Services;
 using Microsoft.Extensions.Caching.Hybrid;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +17,13 @@ builder.Services.AddDbContext<AppDbContext>();
 builder.Services.AddHybridCache();
 builder.Services.AddStackExchangeRedisCache(opt =>
 {
-    opt.Configuration = builder.Configuration.GetConnectionString("Redis");
+    opt.ConfigurationOptions = new ConfigurationOptions
+    {
+        EndPoints = { builder.Configuration.GetConnectionString("Redis")??"" },
+        ConnectTimeout = 5000,
+        SyncTimeout = 3000,
+        AbortOnConnectFail = false
+    };
 });
 
 builder.Services.AddHealthChecks();
