@@ -44,7 +44,11 @@ minikube image load cache-api:latest
 
 helm upgrade --install garnet oci://ghcr.io/microsoft/helm-charts/garnet
 
-helm upgrade --install --create-namespace -n garnet garnet-cache oci://ghcr.io/microsoft/helm-charts/garnet --set replicaCount=1 --set image.repository=ghcr.io/microsoft/garnet --set image.tag=latest --set service.type=ClusterIP --set service.port=6379 --set resources.requests.memory=2Gi --set resources.limits.memory=2Gi --set resources.requests.cpu=500m --set resources.limits.cpu=1000m
+helm upgrade --install --create-namespace -n garnet garnet-cache oci://ghcr.io/microsoft/helm-charts/garnet --set image.repository=ghcr.io/microsoft/garnet --set image.tag=latest --set service.type=ClusterIP
+
+- Example of prod set up for garnet
+
+helm upgrade --install --create-namespace -n garnet garnet-cache oci://ghcr.io/microsoft/helm-charts/garnet --set replicaCount=1 --set image.repository=ghcr.io/microsoft/garnet --set image.tag=latest --set service.type=NodePort --set service.port=6379 --set resources.requests.memory=2Gi --set resources.limits.memory=2Gi --set resources.requests.cpu=500m --set resources.limits.cpu=1000m --set containers.args="{--auth=Password,--password=somepass, --memory=2Gb}" --set persistence.enabled=true, --set volumeClaimTemplates.storageClassName="", volumeClaimTemplates.requestsStorage=5Gb
 
 
 - Install the cache-api
